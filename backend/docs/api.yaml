@@ -1,0 +1,832 @@
+openapi: "3.0.0"
+info:
+  description: "Backend API Description"
+  version: "1.0.0"
+  title: "API"
+paths:
+  /client/create:
+    post:
+      tags:
+        - "client"
+      summary: "Create a new client"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                client:
+                  type: "object"
+                  properties:
+                    type:
+                      type: "string"
+                      enum: ["PESSOA FÍSICA", "PESSOA JURÍDICA"]
+                    active:
+                      type: "boolean"
+                    name:
+                      type: "string"
+                    exName:
+                      type: "string"
+                    document:
+                      type: "string"
+                    email:
+                      type: "string"
+                      format: "email"
+                    phone:
+                      type: "string"
+                    postalCode:
+                      type: "string"
+                    street:
+                      type: "string"
+                    houseNumber:
+                      type: "string"
+                    city:
+                      type: "string"
+                    stateId:
+                      type: "string"
+                    scheduledAt:
+                      type: "string"
+                      format: "datetime"
+                vehicles:
+                  type: "object"
+                  properties:
+                    id:
+                      type: "number"
+            example:
+              client:
+                type: "PESSOA FÍSICA"
+                active: true
+                name: "João Gabriel"
+                exName: "Costa Gomes"
+                document: "16465896702"
+                email: "joaogabrielgomes@gmail.com"
+                phone: "92993585005"
+                postalCode: "69050000"
+                street: "Avenida Constantino Nery"
+                houseNumber: "2533"
+                city: "Manaus"
+                stateId: 1
+                scheduledAt: "2021-07-17T19:30:00.000Z"
+              vehicles:
+                id: 1
+      responses:
+        "200":
+          description: "Ok"
+          content:
+            application/json:
+              schema:
+                properties:
+                  client:
+                    type: "object"
+                    properties:
+                      type:
+                        type: "string"
+                        enum: ["PESSOA FÍSICA", "PESSOA JURÍDICA"]
+                      active:
+                        type: "boolean"
+                      name:
+                        type: "string"
+                      exName:
+                        type: "string"
+                      document:
+                        type: "string"
+                      email:
+                        type: "string"
+                        format: "email"
+                      phone:
+                        type: "string"
+                      postalCode:
+                        type: "string"
+                      street:
+                        type: "string"
+                      houseNumber:
+                        type: "string"
+                      city:
+                        type: "string"
+                      stateId:
+                        type: "string"
+                      scheduledAt:
+                        type: "string"
+                        format: "datetime"
+                      updatedAt:
+                        type: "string"
+                        format: "datetime"
+                      createdAt:
+                        type: "string"
+                        format: "datetime"
+                  vehicles:
+                    type: "array"
+                    items:
+                      type: "object"
+                      properties:
+                        id:
+                          type: "number"
+                        clientId:
+                          type: "number"
+                        vehicleId:
+                          type: "number"
+                        createdAt:
+                          type: "string"
+                          format: "datetime"
+                        updatedAt:
+                          type: "string"
+                          format: "datetime"
+              example:
+                client:
+                  type: "PESSOA FÍSICA"
+                  active: true
+                  name: "João Gabriel"
+                  exName: "Costa Gomes"
+                  document: "16465896702"
+                  email: "joaogabrielgomes@gmail.com"
+                  phone: "92993585005"
+                  postalCode: "69050000"
+                  street: "Avenida Constantino Nery"
+                  houseNumber: "2533"
+                  city: "Manaus"
+                  stateId: 1
+                  scheduledAt: "2021-07-17T19:30:00.000Z"
+                  updatedAt: "2021-07-17T19:30:00.000Z"
+                  createdAt: "2021-07-17T19:30:00.000Z"
+                vehicles:
+                  [
+                    {
+                      id: 1,
+                      clientId: 1,
+                      vehicle: 1,
+                      updatedAt: "2021-07-17T19:30:00.000Z",
+                      createdAt: "2021-07-17T19:30:00.000Z",
+                    },
+                  ]
+  /client/update:
+    put:
+      tags:
+        - "client"
+      summary: "Update a Client"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                client:
+                  type: "object"
+                  properties:
+                    type:
+                      type: "string"
+                      enum: ["PESSOA FÍSICA", "PESSOA JURÍDICA"]
+                    active:
+                      type: "boolean"
+                    name:
+                      type: "string"
+                    exName:
+                      type: "string"
+                    document:
+                      type: "string"
+                    email:
+                      type: "string"
+                      format: "email"
+                    phone:
+                      type: "string"
+                    postalCode:
+                      type: "string"
+                    street:
+                      type: "string"
+                    houseNumber:
+                      type: "string"
+                    city:
+                      type: "string"
+                    stateId:
+                      type: "string"
+                    scheduledAt:
+                      type: "string"
+                      format: "datetime"
+                vehicles:
+                  type: "object"
+                  properties:
+                    toCreate:
+                      type: "array"
+                      items:
+                        type: "object"
+                        properties:
+                          vehicleId:
+                            type: "number"
+                          clientId:
+                            type: "number"
+                    toDelete:
+                      type: "array"
+                      items:
+                        type: "object"
+                        properties:
+                          id:
+                            type: "number"
+                          vehicleId:
+                            type: "number"
+                          clientId:
+                            type: "number"
+      responses:
+        "200":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                properties:
+                  client:
+                    type: "object"
+                    properties:
+                      id:
+                        type: "number"
+                      type:
+                        type: "string"
+                        enum: ["PESSOA FÍSICA", "PESSOA JURÍDICA"]
+                      active:
+                        type: "boolean"
+                      name:
+                        type: "string"
+                      exName:
+                        type: "string"
+                      document:
+                        type: "string"
+                      email:
+                        type: "string"
+                        format: "email"
+                      phone:
+                        type: "string"
+                      postalCode:
+                        type: "string"
+                      street:
+                        type: "string"
+                      houseNumber:
+                        type: "string"
+                      city:
+                        type: "string"
+                      stateId:
+                        type: "string"
+                      scheduledAt:
+                        type: "string"
+                        format: "datetime"
+                      updatedAt:
+                        type: "string"
+                        format: "datetime"
+                      createdAt:
+                        type: "string"
+                        format: "datetime"
+                  Vehicles:
+                    type: "array"
+                    items:
+                      type: "object"
+                      properties:
+                        id:
+                          type: "number"
+                        name:
+                          type: "string"
+                        createdAt:
+                          type: "string"
+                          format: "datetime"
+                        updatedAt:
+                          type: "string"
+                          format: "datetime"
+                        ClientsVehicles:
+                          type: "object"
+                          properties:
+                            id:
+                              type: "number"
+                  State:
+                    type: "object"
+                    properties:
+                      id:
+                        type: "number"
+                      name:
+                        type: "string"
+                      reatedAt:
+                        type: "string"
+                        format: "datetime"
+                      updatedAt:
+                        type: "string"
+                        format: "datetime"
+              example:
+                client:
+                  type: "PESSOA FÍSICA"
+                  active: true
+                  name: "João Gabriel"
+                  exName: "Costa Gomes"
+                  document: "16465896702"
+                  email: "joaogabrielgomes@gmail.com"
+                  phone: "92993585005"
+                  postalCode: "69050000"
+                  street: "Avenida Constantino Nery"
+                  houseNumber: "2533"
+                  city: "Manaus"
+                  stateId: 1
+                  scheduledAt: "2021-07-17T19:30:00.000Z"
+                  updatedAt: "2021-07-17T19:30:00.000Z"
+                  createdAt: "2021-07-17T19:30:00.000Z"
+                Vehicles:
+                  [
+                    {
+                      id: 1,
+                      name: "Carro",
+                      updatedAt: "2021-07-17T19:30:00.000Z",
+                      createdAt: "2021-07-17T19:30:00.000Z",
+                      ClientsVehicles: { id: 2 },
+                    },
+                  ]
+                State:
+                  id: 6
+                  name: "Ceará"
+                  updatedAt: "2021-07-17T19:30:00.000Z"
+                  createdAt: "2021-07-17T19:30:00.000Z"
+  /client/delete/{id}:
+    delete:
+      tags:
+        - "client"
+      summary: "Delete a Client"
+      parameters:
+        - name: id
+          in: path
+          description: Client id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Ok"
+  /client:
+    get:
+      tags:
+        - "client"
+      summary: "Get all Clients"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: "number"
+                  type:
+                    type: "string"
+                    enum: ["PESSOA FÍSICA", "PESSOA JURÍDICA"]
+                  active:
+                    type: "boolean"
+                  name:
+                    type: "string"
+                  exName:
+                    type: "string"
+                  document:
+                    type: "string"
+                  email:
+                    type: "string"
+                    format: "email"
+                  phone:
+                    type: "string"
+                  postalCode:
+                    type: "string"
+                  street:
+                    type: "string"
+                  houseNumber:
+                    type: "string"
+                  city:
+                    type: "string"
+                  stateId:
+                    type: "string"
+                  scheduledAt:
+                    type: "string"
+                    format: "datetime"
+                  updatedAt:
+                    type: "string"
+                    format: "datetime"
+                  createdAt:
+                    type: "string"
+                    format: "datetime"
+                  Vehicles:
+                    type: "array"
+                    items:
+                      type: "object"
+                      properties:
+                        id:
+                          type: "number"
+                        name:
+                          type: "string"
+                        createdAt:
+                          type: "string"
+                          format: "datetime"
+                        updatedAt:
+                          type: "string"
+                          format: "datetime"
+                        ClientsVehicles:
+                          type: "object"
+                          properties:
+                            id:
+                              type: "number"
+                  State:
+                    type: "object"
+                    properties:
+                      id:
+                        type: "number"
+                      name:
+                        type: "string"
+                      reatedAt:
+                        type: "string"
+                        format: "datetime"
+                      updatedAt:
+                        type: "string"
+                        format: "datetime"
+              example:
+                client:
+                  type: "PESSOA FÍSICA"
+                  active: true
+                  name: "João Gabriel"
+                  exName: "Costa Gomes"
+                  document: "16465896702"
+                  email: "joaogabrielgomes@gmail.com"
+                  phone: "92993585005"
+                  postalCode: "69050000"
+                  street: "Avenida Constantino Nery"
+                  houseNumber: "2533"
+                  city: "Manaus"
+                  stateId: 1
+                  scheduledAt: "2021-07-17T19:30:00.000Z"
+                  updatedAt: "2021-07-17T19:30:00.000Z"
+                  createdAt: "2021-07-17T19:30:00.000Z"
+                Vehicles:
+                  [
+                    {
+                      id: 1,
+                      name: "Carro",
+                      updatedAt: "2021-07-17T19:30:00.000Z",
+                      createdAt: "2021-07-17T19:30:00.000Z",
+                      ClientsVehicles: { id: 2 },
+                    },
+                  ]
+                State:
+                  id: 6
+                  name: "Ceará"
+                  updatedAt: "2021-07-17T19:30:00.000Z"
+                  createdAt: "2021-07-17T19:30:00.000Z"
+  /client/{id}:
+    get:
+      tags:
+        - "client"
+      summary: "Get one Client"
+      parameters:
+        - name: id
+          in: path
+          description: Client id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: "number"
+                  type:
+                    type: "string"
+                    enum: ["PESSOA FÍSICA", "PESSOA JURÍDICA"]
+                  active:
+                    type: "boolean"
+                  name:
+                    type: "string"
+                  exName:
+                    type: "string"
+                  document:
+                    type: "string"
+                  email:
+                    type: "string"
+                    format: "email"
+                  phone:
+                    type: "string"
+                  postalCode:
+                    type: "string"
+                  street:
+                    type: "string"
+                  houseNumber:
+                    type: "string"
+                  city:
+                    type: "string"
+                  stateId:
+                    type: "string"
+                  scheduledAt:
+                    type: "string"
+                    format: "datetime"
+                  updatedAt:
+                    type: "string"
+                    format: "datetime"
+                  createdAt:
+                    type: "string"
+                    format: "datetime"
+                  Vehicles:
+                    type: "array"
+                    items:
+                      type: "object"
+                      properties:
+                        id:
+                          type: "number"
+                        name:
+                          type: "string"
+                        createdAt:
+                          type: "string"
+                          format: "datetime"
+                        updatedAt:
+                          type: "string"
+                          format: "datetime"
+                        ClientsVehicles:
+                          type: "object"
+                          properties:
+                            id:
+                              type: "number"
+                  State:
+                    type: "object"
+                    properties:
+                      id:
+                        type: "number"
+                      name:
+                        type: "string"
+                      reatedAt:
+                        type: "string"
+                        format: "datetime"
+                      updatedAt:
+                        type: "string"
+                        format: "datetime"
+              example:
+                client:
+                  type: "PESSOA FÍSICA"
+                  active: true
+                  name: "João Gabriel"
+                  exName: "Costa Gomes"
+                  document: "16465896702"
+                  email: "joaogabrielgomes@gmail.com"
+                  phone: "92993585005"
+                  postalCode: "69050000"
+                  street: "Avenida Constantino Nery"
+                  houseNumber: "2533"
+                  city: "Manaus"
+                  stateId: 1
+                  scheduledAt: "2021-07-17T19:30:00.000Z"
+                  updatedAt: "2021-07-17T19:30:00.000Z"
+                  createdAt: "2021-07-17T19:30:00.000Z"
+                Vehicles:
+                  [
+                    {
+                      id: 1,
+                      name: "Carro",
+                      updatedAt: "2021-07-17T19:30:00.000Z",
+                      createdAt: "2021-07-17T19:30:00.000Z",
+                      ClientsVehicles: { id: 2 },
+                    },
+                  ]
+                State:
+                  id: 6
+                  name: "Ceará"
+                  updatedAt: "2021-07-17T19:30:00.000Z"
+                  createdAt: "2021-07-17T19:30:00.000Z"
+  /states:
+    get:
+      tags:
+        - "states"
+      summary: "Get all states"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    id:
+                      type: "number"
+                    name:
+                      type: "string"
+                    createdAt:
+                      type: "string"
+                      format: "datetime"
+                    updatedAt:
+                      type: "string"
+                      format: "datetime"
+              example:
+                [
+                  {
+                    "id": 1,
+                    "name": "Acre",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 2,
+                    "name": "Alagoas",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 3,
+                    "name": "Amapá",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 4,
+                    "name": "Amazonas",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 5,
+                    "name": "Bahia",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 6,
+                    "name": "Ceará",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 7,
+                    "name": "Distrito Federal",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 8,
+                    "name": "Espírito Santo",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 9,
+                    "name": "Goiás",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 10,
+                    "name": "Maranhão",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 11,
+                    "name": "Mato Grosso",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 12,
+                    "name": "Mato Grosso do Sul",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 13,
+                    "name": "Minas Gerais",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 14,
+                    "name": "Pará",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 15,
+                    "name": "Paraíba",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 16,
+                    "name": "Paraná",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 17,
+                    "name": "Pernambuco",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 18,
+                    "name": "Piauí",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 19,
+                    "name": "Rio de Janeiro",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 20,
+                    "name": "Rio Grande do Norte",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 21,
+                    "name": "Rio Grande do Sul",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 22,
+                    "name": "Rondônia",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 23,
+                    "name": "Roraima",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 24,
+                    "name": "Santa Catarina",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 25,
+                    "name": "São Paulo",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 26,
+                    "name": "Sergipe",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 27,
+                    "name": "Tocantins",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                  {
+                    "id": 28,
+                    "name": "Distrito Federal",
+                    "createdAt": "2021-07-18T01:54:31.832Z",
+                    "updatedAt": "2021-07-18T01:54:31.832Z",
+                  },
+                ]
+  /vehicles:
+    get:
+      tags:
+        - "vehicles"
+      summary: "Get all vehicles"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    id:
+                      type: "number"
+                    name:
+                      type: "string"
+                    createdAt:
+                      type: "string"
+                      format: "datetime"
+                    updatedAt:
+                      type: "string"
+                      format: "datetime"
+              example:
+                [
+                  {
+                    "id": 1,
+                    "name": "Caminhão",
+                    "createdAt": "2021-07-18T01:54:31.843Z",
+                    "updatedAt": "2021-07-18T01:54:31.843Z",
+                  },
+                  {
+                    "id": 2,
+                    "name": "Carro",
+                    "createdAt": "2021-07-18T01:54:31.843Z",
+                    "updatedAt": "2021-07-18T01:54:31.843Z",
+                  },
+                  {
+                    "id": 3,
+                    "name": "Moto",
+                    "createdAt": "2021-07-18T01:54:31.843Z",
+                    "updatedAt": "2021-07-18T01:54:31.843Z",
+                  },
+                ]
