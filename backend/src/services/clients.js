@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { InternalError } = require("../utils/errors");
 
 const { Clients, Vehicles, States } = require("../database/models");
 
@@ -19,7 +19,7 @@ module.exports = {
         },
       ],
     }).catch((err) => {
-      console.log(err);
+      throw new InternalError(err);
     });
     return clients;
   },
@@ -43,7 +43,7 @@ module.exports = {
         },
       ],
     }).catch((err) => {
-      console.log(err);
+      throw new InternalError(err);
     });
     return clients;
   },
@@ -60,7 +60,7 @@ module.exports = {
    */
   create: async function (data) {
     const driverOrder = await Clients.create(data).catch((err) => {
-      console.log(err);
+      throw new InternalError(err);
     });
 
     return driverOrder.dataValues;
@@ -89,7 +89,7 @@ module.exports = {
       returning: true,
       where: { id },
     }).catch((err) => {
-      console.log(err);
+      throw new InternalError(err);
     });
   },
   /**
@@ -103,7 +103,7 @@ module.exports = {
         id,
       },
     }).catch((err) => {
-      console.log(err);
+      throw new InternalError(err);
     });
 
     return status;

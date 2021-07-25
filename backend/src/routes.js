@@ -4,10 +4,16 @@ const routes = express.Router();
 
 // Application
 const {
+  AuthController,
   ClientsController,
   VehiclesController,
   StatesController,
 } = require("./controllers");
+
+// Auth routes
+routes.post("/auth/check", AuthController.check);
+routes.post("/auth/logout", AuthController.logout);
+routes.post("/auth/login", AuthController.login);
 
 // Client routes
 routes.get("/client", ClientsController.all);

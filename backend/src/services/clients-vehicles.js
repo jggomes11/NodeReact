@@ -1,5 +1,4 @@
-const { Op } = require("sequelize");
-
+const { InternalError } = require("../utils/errors");
 const { ClientsVehicles } = require("../database/models");
 
 module.exports = {
@@ -11,7 +10,7 @@ module.exports = {
   create: async function (data) {
     const clientsVehicles = await ClientsVehicles.bulkCreate(data).catch(
       (err) => {
-        console.log(err);
+        throw new InternalError(err);
       }
     );
 
@@ -55,7 +54,7 @@ module.exports = {
         id,
       },
     }).catch((err) => {
-      console.log(err);
+      throw new InternalError(err);
     });
   },
 };

@@ -1,3 +1,5 @@
+const { InternalError } = require("../utils/errors");
+
 const { Vehicles } = require("../database/models");
 
 module.exports = {
@@ -7,7 +9,7 @@ module.exports = {
    */
   all: async function () {
     const states = await Vehicles.findAll().catch((err) => {
-      console.log(err);
+      throw new InternalError(err);
     });
     return states;
   },

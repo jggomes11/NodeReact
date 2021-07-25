@@ -22,9 +22,15 @@ app.use(express.json());
 
 app.use(cors());
 
+const { authMiddleware } = require("./src/middlewares/auth");
+const { errorMiddleware } = require("./src/middlewares/error");
+
+app.use(authMiddleware);
 // Routes
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(require("./src/routes"));
+
+app.use(errorMiddleware);
 
 // Sequelize
 const force = true;

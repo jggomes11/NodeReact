@@ -1,5 +1,5 @@
 module.exports = {
-  // CRUD
+  AuthService: require("./auth"),
   ClientsService: require("./clients"),
   ClientsVehiclesService: require("./clients-vehicles"),
   StatesService: require("./states"),
