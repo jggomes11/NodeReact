@@ -37,63 +37,70 @@ export default function FormClient(props) {
   const [name, setName] = useState(
     selectedClient.id ? selectedClient.name : ""
   );
-
   const [exName, setExName] = useState(
     selectedClient.id ? selectedClient.exName : ""
   );
-
   const [type, setType] = useState(
     selectedClient.id ? selectedClient.type : ""
   );
-
   const [email, setEmail] = useState(
     selectedClient.id ? selectedClient.email : ""
   );
-
   const [active, setActive] = useState(
     selectedClient.id ? selectedClient.active : ""
   );
-
   const [radios, setRadios] = useState({
     active: selectedClient.active,
     inactive: !selectedClient.active,
   });
-
   const [document, setDocument] = useState(
     selectedClient.id ? selectedClient.document : ""
   );
-
   const [phone, setPhone] = useState(
     selectedClient.id ? selectedClient.phone : ""
   );
-
   const [state, setState] = useState(
     selectedClient.id ? selectedClient.State : []
   );
-
   const [postalCode, setPostalCode] = useState(
     selectedClient.id ? selectedClient.postalCode : ""
   );
-
   const [street, setStreet] = useState(
     selectedClient.id ? selectedClient.street : ""
   );
-
   const [houseNumber, setHouseNumber] = useState(
     selectedClient.id ? selectedClient.houseNumber : ""
   );
-
   const [city, setCity] = useState(
     selectedClient.id ? selectedClient.city : ""
   );
-
   const [date, setDate] = useState(
     selectedClient.id ? getDate(selectedClient.scheduledAt) : ""
   );
-
   const [time, setTime] = useState(
     selectedClient.id ? getTime(selectedClient.scheduledAt) : ""
   );
+
+  // Errors
+
+  const [errors, setErrors] = useState({
+    name: false,
+    exName: false,
+    type: false,
+    email: false,
+    active: false,
+    radios: false,
+    document: false,
+    phone: false,
+    state: false,
+    postalCode: false,
+    street: false,
+    houseNumber: false,
+    city: false,
+    date: false,
+    time: false,
+    vehicles: false,
+  });
 
   const [vehicles, setVehicles] = useState({
     truck: {
@@ -130,7 +137,6 @@ export default function FormClient(props) {
   };
 
   const handleSetActive = (e) => {
-    console.log(e);
     setActive(e === "true");
   };
 
@@ -169,27 +175,59 @@ export default function FormClient(props) {
     setTime(e);
   };
 
-  const handleSubmit = () => {
-    const send = {
-      id: selectedClient.id,
-      name,
-      exName,
-      type,
-      email,
-      active,
-      document,
-      phone,
-      state,
-      postalCode,
-      street,
-      houseNumber,
-      city,
-      date,
-      time,
-      preVehicles: selectedClient.Vehicles,
-      selVehicles: Object.values(vehicles),
+  const handleErrors = () => {
+    const errs = {
+      name: name.length === 0 ? true : false,
+      exName: exName.length === 0 ? true : false,
+      type: type.length === 0 ? true : false,
+      email: email.length === 0 ? true : false,
+      active: active.length === 0 ? true : false,
+      document: document.length === 0 ? true : false,
+      phone: phone.length === 0 ? true : false,
+      state: state.length === 0 ? true : false,
+      postalCode: postalCode.length === 0 ? true : false,
+      street: street.length === 0 ? true : false,
+      houseNumber: houseNumber.length === 0 ? true : false,
+      date: date.length === 0 ? true : false,
+      time: time.length === 0 ? true : false,
     };
-    onSubmit(send);
+
+    setErrors(errs);
+
+    const hasErrors = Object.values(errs).filter((err) => err === true);
+    console.log(hasErrors);
+
+    if (hasErrors.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const handleSubmit = () => {
+    const hasError = handleErrors();
+    if (!hasError) {
+      const send = {
+        id: selectedClient.id,
+        name,
+        exName,
+        type,
+        email,
+        active,
+        document,
+        phone,
+        state,
+        postalCode,
+        street,
+        houseNumber,
+        city,
+        date,
+        time,
+        preVehicles: selectedClient.Vehicles,
+        selVehicles: Object.values(vehicles),
+      };
+      onSubmit(send);
+    }
   };
 
   return (
@@ -207,6 +245,7 @@ export default function FormClient(props) {
             id="name"
             label={type === "PESSOA FÍSICA" ? "Nome" : "Nome Fantasia"}
             required
+            error={errors.name}
             value={name}
             onChange={(e) => handleName(e.target.value)}
             fullWidth
@@ -217,6 +256,7 @@ export default function FormClient(props) {
             id="exName"
             label={type === "PESSOA FÍSICA" ? "Sobrenome" : "Razão Social"}
             required
+            error={errors.exName}
             value={exName}
             onChange={(e) => handleExName(e.target.value)}
             fullWidth
@@ -226,6 +266,7 @@ export default function FormClient(props) {
             <Select
               labelId="tipo"
               id="tipo"
+              error={errors.type}
               value={type}
               onChange={(e) => handleType(e.target.value)}
             >
@@ -239,6 +280,7 @@ export default function FormClient(props) {
             id="email"
             label="Email"
             type="email"
+            error={errors.email}
             value={email}
             onChange={(e) => handleEmail(e.target.value)}
             fullWidth
@@ -256,6 +298,7 @@ export default function FormClient(props) {
               row
               aria-label="gender"
               name="row-radio-buttons-group"
+              error={errors.active}
               value={active}
               onChange={(e) => handleSetActive(e.target.value)}
             >
@@ -278,6 +321,7 @@ export default function FormClient(props) {
             margin="dense"
             id="document"
             label={type === "PESSOA FÍSICA" ? "Cpf" : "Cnpj"}
+            error={errors.document}
             value={
               type === "PESSOA FÍSICA"
                 ? addCpfCnpjMask(document, "CPF")
@@ -293,6 +337,7 @@ export default function FormClient(props) {
             id="phone"
             label="Telefone"
             type="phone"
+            error={errors.phone}
             value={phone}
             onChange={(e) => handleSetPhone(e.target.value)}
             fullWidth
@@ -303,6 +348,7 @@ export default function FormClient(props) {
             margin="dense"
             id="postalCode"
             label="Cep"
+            error={errors.postalCode}
             value={postalCode}
             onChange={(e) => handleSetPostalCode(e.target.value)}
             fullWidth
@@ -313,6 +359,7 @@ export default function FormClient(props) {
             margin="dense"
             id="street"
             label="Rua"
+            error={errors.street}
             value={street}
             onChange={(e) => handleSetStreet(e.target.value)}
             fullWidth
@@ -323,6 +370,7 @@ export default function FormClient(props) {
             margin="dense"
             id="houseNumber"
             label="Número"
+            error={errors.houseNumber}
             value={houseNumber}
             onChange={(e) => handleSetHouseNumber(e.target.value)}
             fullWidth
@@ -333,6 +381,7 @@ export default function FormClient(props) {
             margin="dense"
             id="city"
             label="Cidade"
+            error={errors.city}
             value={city}
             onChange={(e) => handleSetCity(e.target.value)}
             fullWidth
@@ -344,6 +393,7 @@ export default function FormClient(props) {
               labelId="state"
               id="state"
               label={state.name}
+              error={errors.state}
               value={state}
               onChange={(e) => handleSetState(e.target.value)}
             >
@@ -364,7 +414,10 @@ export default function FormClient(props) {
             id="date"
             label="Data"
             type="date"
-            defaultValue={date}
+            error={errors.date}
+            InputLabelProps={{
+              shrink: true,
+            }}
             value={date}
             onChange={(e) => handleSetDate(e.target.value)}
             fullWidth
@@ -376,6 +429,11 @@ export default function FormClient(props) {
             id="time"
             label="Hora"
             type="time"
+            error={errors.time}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            error={errors.time}
             value={time}
             onChange={(e) => handleSetTime(e.target.value)}
             fullWidth
