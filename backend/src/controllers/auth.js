@@ -29,12 +29,19 @@ module.exports = {
    * @param {Object} req                    Object with data from the request made.
    * @param {Object} req.body               Object with data of the body of the request.
    * @param {String} req.body.id            User's id
-   * @param {String} req.body.authorization Header's authorization
+   * @param {String} req.body.token         Header's authorization
    * @param res
    * @param next
    * @returns {Promise.<void>}
    */
   check: async function (req, res, next) {
+    const { id, token } = req.body;
+
+    const loginData = {
+      id,
+      token,
+    };
+
     await AuthService.checkLogin(loginData);
 
     res.status(HttpStatus.OK).end();

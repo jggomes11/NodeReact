@@ -5,9 +5,15 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 // Components
 import ClientTable from "../Tables/Client";
+import Login from "../login";
 
 //SIDE MENU ICONS
 import IconButton from "@material-ui/core/IconButton";
@@ -22,6 +28,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+
+import { login, checkLogin } from "../../api";
 
 const drawerWidth = 240;
 
@@ -63,9 +71,67 @@ function ResponsiveDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
 
-  const [drawerTitle, setDrawerTitle] = useState("Cliente");
+  const [drawerTitle, setDrawerTitle] = useState("Login");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openClients, setOpenClients] = useState(true);
+  const [openClients, setOpenClients] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  /**
+   * @param {Boolean} logged
+   */
+  const handleIsLogged = (logged) => {
+    setIsLogged(logged);
+  };
+
+  const handleLogin = (data) => {
+    const { email, password } = data;
+
+    login({
+      email,
+      password,
+    }).then((result) => {
+      const { id, token } = result;
+      localStorage.setItem("auth", JSON.stringify(token));
+      localStorage.setItem("id", JSON.stringify(id));
+      handleIsLogged(result);
+    });
+  };
+
+  /**
+   * Change page when click drawer option
+   * @param {String} name   SideBarMenu option name
+   */
+  const handleClick = (name) => {
+    setDrawerTitle(name);
+    switch (name) {
+      case "Cliente":
+        setOpenClients(true);
+        // Set all others to false
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("auth"));
+    const id = JSON.parse(localStorage.getItem("id"));
+    console.log("aqui");
+    checkLogin({ id, token }).then((status) => {
+      if (status === 200) {
+        setIsLogged(true);
+      } else {
+        setIsLogged(false);
+      }
+      setDrawerTitle("Selecione uma aba");
+      setIsLoading(false);
+    });
+  }, []);
 
   /**
    * Drawer's side bar option list
@@ -94,42 +160,26 @@ function ResponsiveDrawer(props) {
     // },
   ];
 
-  /**
-   * Change page when click drawer option
-   * @param {String} name   SideBarMenu option name
-   */
-  const handleClick = (name) => {
-    setDrawerTitle(name);
-    switch (name) {
-      case "Cliente":
-        setOpenClients(true);
-        // Set all others to false
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
   const drawer = (
     <div>
       <div className={classes.toolbar} />
       <Divider />
-      <List>
-        {options.map((option, index) => (
-          <ListItem
-            button
-            key={option.id}
-            onClick={() => handleClick(option.name)}
-          >
-            <ListItemIcon>{option.icon}</ListItemIcon>
-            <ListItemText primary={option.name} />
-          </ListItem>
-        ))}
-      </List>
+      {isLogged ? (
+        <List>
+          {options.map((option, index) => (
+            <ListItem
+              button
+              key={option.id}
+              onClick={() => handleClick(option.name)}
+            >
+              <ListItemIcon>{option.icon}</ListItemIcon>
+              <ListItemText primary={option.name} />
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <></>
+      )}
       <Divider />
     </div>
   );
@@ -189,7 +239,17 @@ function ResponsiveDrawer(props) {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        {openClients ? <ClientTable></ClientTable> : ""}
+        {isLogged ? (
+          openClients ? (
+            <ClientTable></ClientTable>
+          ) : (
+            <></>
+          )
+        ) : !isLoading ? (
+          <Login onSubmit={handleLogin}></Login>
+        ) : (
+          <></>
+        )}
       </main>
     </div>
   );

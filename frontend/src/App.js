@@ -1,4 +1,5 @@
-import ClientTable from "./components/Tables/Client";
+import React, { useState, useEffect } from "react";
+
 import Drawer from "./components/Drawer";
 import "./App.css";
 
